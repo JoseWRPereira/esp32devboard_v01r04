@@ -9,20 +9,12 @@
 #define SERIAL_IO_LCD_CK_PIN        17
 #define SERIAL_IO_LCD_DO_PIN        18
 #define SERIAL_IO_LCD_LD_PIN        5
-
-#define SERIAL_IO_LCD_VET_LEN       1
 unsigned char lcd = 0;
-unsigned char lcd_null = 0;
-// unsigned char vLCD_OUT[SERIAL_IO_LCD_VET_LEN] = {0};
-// unsigned char vLCD_IN[SERIAL_IO_LCD_VET_LEN];
-
-SERIAL_IO lcd_io =  {   SERIAL_IO_LCD_CK_PIN,
-                        13,
+SERIAL_OUT lcd_drv = {  SERIAL_IO_LCD_CK_PIN,
                         SERIAL_IO_LCD_DO_PIN,
                         SERIAL_IO_LCD_LD_PIN,
-                        &lcd_null,
                         &lcd,
-                        SERIAL_IO_LCD_VET_LEN
+                        1
                     };
 
 
@@ -37,8 +29,8 @@ void delay( unsigned int t )
 // #define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_io_scan(lcd_io)
 // #define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_io_scan(lcd_io)
 // #define LCD_RS( x )     lcd = x ? (lcd | 0x04) : (lcd & ~0x04)
-#define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_io_scan(&lcd_io)
-#define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_io_scan(&lcd_io)
+#define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_out_scan(&lcd_drv)
+#define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_out_scan(&lcd_drv)
 #define LCD_RS( x )     lcd = x ? (lcd | 0x04) : (lcd & ~0x04)
 #define LCD_ROWS        2
 #define LCD_COLS        16
@@ -163,7 +155,7 @@ void lcd_init( void )
 {
     delay(100);
     lcd = 0;
-    serial_io_init( &lcd_io );
+    serial_out_init( &lcd_drv );
 
     delay(100);
     LCD_EN( 1 );

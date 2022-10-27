@@ -1,10 +1,23 @@
 #ifndef SERIAL_IO_H
 #define SERIAL_IO_H
 
-// #define SIO_DI_PIN      13
-// #define SIO_CK_PIN      12
-// #define SIO_DO_PIN      27
-// #define SIO_LD_PIN      14
+typedef struct serialinT
+{
+    unsigned char ck_pin;
+    unsigned char di_pin;
+    unsigned char ld_pin;
+    unsigned char * vIn;
+    unsigned char vLength;
+} SERIAL_IN;
+
+typedef struct serialoutT
+{
+    unsigned char ck_pin;
+    unsigned char do_pin;
+    unsigned char ld_pin;
+    unsigned char * vOut;
+    unsigned char vLength;
+} SERIAL_OUT;
 
 typedef struct serialioT
 {
@@ -17,14 +30,12 @@ typedef struct serialioT
     unsigned char vLength;
 } SERIAL_IO;
 
-void serial_io_scan( SERIAL_IO * ptrSerial_io );
-void serial_io_init( SERIAL_IO * ptrSerial_io );
+void serial_in_scan(  SERIAL_IN  * ptrSerial_io );
+void serial_out_scan( SERIAL_OUT * ptrSerial_io );
+void serial_io_scan(  SERIAL_IO  * ptrSerial_io );
 
-//////////////////////////////////////////
-//////////////////////////////////////////
-
-
-void serialIO_scan( void );
-void serialIO_init( unsigned char * ptrIn, unsigned char * ptrOut, unsigned char length );
+void serial_in_init(  SERIAL_IN  * ptrSerial_io );
+void serial_out_init( SERIAL_OUT * ptrSerial_io );
+void serial_io_init(  SERIAL_IO  * ptrSerial_io );
 
 #endif
