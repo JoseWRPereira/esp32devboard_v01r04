@@ -10,5 +10,5 @@ void blink_init( void )
 void blink( void )
 {
     gpio_set_level(GPIO_NUM_2, !gpio_get_level(GPIO_NUM_2));
-    vTaskDelay(50);    
+    // vTaskDelay(10);    
 }
