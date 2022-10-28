@@ -26,14 +26,15 @@ void delay( unsigned int t )
 }
 
 //****************** Interface com PORTs/Pinos
-// #define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_io_scan(lcd_io)
-// #define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_io_scan(lcd_io)
-// #define LCD_RS( x )     lcd = x ? (lcd | 0x04) : (lcd & ~0x04)
 #define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_out_scan(&lcd_drv)
 #define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_out_scan(&lcd_drv)
 #define LCD_RS( x )     lcd = x ? (lcd | 0x04) : (lcd & ~0x04)
 #define LCD_ROWS        2
 #define LCD_COLS        16
+// __delay_ms( 2 );
+// __delay_us( 40 );
+#define LCD_SHORT_DELAY()           delay( 10 )
+#define LCD_LONG_DELAY()            delay( 10 )
 
 
 
@@ -79,6 +80,7 @@ void delay( unsigned int t )
 
 
 
+
 //**************************************************************
 // Envia uma instrução para o display (Instruction Register)
 void lcd_instReg( unsigned char i )
@@ -88,11 +90,9 @@ void lcd_instReg( unsigned char i )
 
     LCD_EN( 0 );
     if( i == LCD_CLEAR_DISPLAY || i == LCD_RETURN_HOME )
-        // __delay_ms( 2 );
-        delay( 2 );
+        LCD_LONG_DELAY();
     else
-        // __delay_us( 40 );
-        delay( 1 );
+        LCD_SHORT_DELAY();
     LCD_EN( 1 );
     
 
@@ -101,8 +101,7 @@ void lcd_instReg( unsigned char i )
         LCD_RS( 0 );
         LCD_BUS( i );
         LCD_EN( 0 );
-        // __delay_us( 40 );
-        delay( 1 );
+        LCD_SHORT_DELAY();
         LCD_EN( 1 );
     }
 
@@ -110,11 +109,9 @@ void lcd_instReg( unsigned char i )
     LCD_BUS( i<<4 );
     LCD_EN( 0 );
     if( i == LCD_CLEAR_DISPLAY || i == LCD_RETURN_HOME )
-        // __delay_ms( 2 );
-        delay( 2 );
+        LCD_LONG_DELAY();
     else
-        // __delay_us( 40 );
-        delay( 1 );
+        LCD_SHORT_DELAY();
     LCD_EN( 1 );
 }
 
@@ -126,15 +123,13 @@ void lcd_dataReg( unsigned char d )
     LCD_RS( 1 );
     LCD_BUS( d );
     LCD_EN(0);
-    // __delay_us( 40 );
-    delay( 1 );
+    LCD_SHORT_DELAY();
     LCD_EN( 1 );
 
     LCD_RS( 1 );
     LCD_BUS( d << 4 );
     LCD_EN( 0 );
-    // __delay_us( 40 );
-    delay( 1 );
+    LCD_SHORT_DELAY();
     LCD_EN( 1 );
 }
 
@@ -153,17 +148,17 @@ void lcd_lincol( unsigned char lin, unsigned char col)
 // o proprio display
 void lcd_init( void )
 {
-    delay(100);
+    delay(250);
     lcd = 0;
     serial_out_init( &lcd_drv );
 
-    delay(100);
+    delay(250);
     LCD_EN( 1 );
     lcd_instReg( LCD_FUNCTION_SET|LCD_FS_DATA_LENGTH_4|LCD_FS_LINE_NUMBER_2 );
     lcd_instReg( LCD_DISPLAY_CONTROL|LCD_DC_DISPLAY_ON|LCD_DC_CURSOR_OFF|LCD_DC_BLINK_OFF );
     lcd_instReg( LCD_CLEAR_DISPLAY );
     lcd_instReg( LCD_RETURN_HOME );
-    delay(100);
+    delay(500);
 }
 
 
@@ -205,8 +200,10 @@ void lcd_print( unsigned char lin, unsigned char col, char * str )
 // Obs: O 3 significa o número de espaços usados no display para 
 // a impressão da variavel var.
 //
-void lcd_num(  unsigned char lin, unsigned char col,
-                    int num, unsigned char tam )
+// void lcd_num(  unsigned char lin, unsigned char col,
+//                     int num, unsigned char tam )
+void lcd_num( uint8_t lin, uint8_t col,
+                    int16_t num, uint8_t tam )
 {
     int div;
     unsigned char size;
@@ -237,12 +234,31 @@ void lcd_num(  unsigned char lin, unsigned char col,
 
     if( sinal )
         lcd_dataReg('-');
- 
-    do
+
+    
+    while( div >= 1 )
     {
         lcd_dataReg( (unsigned char)(num / div) + '0' );
         num = num % div;
         div/=10;
     }
-    while( div >= 1 );
+}
+
+void num2str( int num, char * pos )
+{
+    int mask = 10000;
+    char print = 0;
+    char n = 0;
+    while( mask )
+    {
+        n = (num/mask)%10;
+        if( print || n )
+        {
+            print = 1;
+            *pos = n+'0';
+            ++pos;
+        }
+        num %= mask;
+        mask /= 10;
+    }
 }

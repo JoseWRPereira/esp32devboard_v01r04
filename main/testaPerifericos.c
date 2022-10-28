@@ -5,6 +5,7 @@
 #include "piscaLed.h"
 #include "serial_io.h"
 #include "lcd.h"
+#include "keyboard.h"
 
 
 #define DGITAL_IO_CK_PIN      12
@@ -22,34 +23,26 @@ SERIAL_IO digital_io =  {
                             &saidas,
                             1
                         };
+int16_t cont = 0;
 
-
-
-
-#define IO_SIZE     1
 void app_main(void)
 {
-    blink_init();
-    lcd_init();
+//    char tecla = 0;
+    char lin1[] = "E[   ]    S[   ]";
     serial_io_init(&digital_io);
+    keyboard_init();
+    lcd_init();
+
     lcd_print(0,0,"Placa de Desenv.");
+    lcd_print(1,0,lin1);
     while( 1 )
     {
-        blink();
-        vTaskDelay(1000);
-        ++saidas;
         serial_io_scan(&digital_io);
-        lcd_num(1,0, (int)saidas, 3 );
+        saidas = entradas;
+        lcd_num(1,2,entradas,3);
+        lcd_num(1,12, cont,3);
+        ++cont;
+        if( cont > 99 )
+            cont = -99;
     }
 }
-
-
-// void app_main(void)
-// {
-//     gpio_set_direction(GPIO_NUM_2,GPIO_MODE_INPUT_OUTPUT);
-//     while( 1 )
-//     {
-//         gpio_set_level(GPIO_NUM_2, !gpio_get_level(GPIO_NUM_2));
-//         vTaskDelay(50);    
-//     }
-// }
