@@ -33,8 +33,8 @@ void delay( unsigned int t )
 #define LCD_COLS        16
 // __delay_ms( 2 );
 // __delay_us( 40 );
-#define LCD_SHORT_DELAY()           delay( 10 )
-#define LCD_LONG_DELAY()            delay( 10 )
+#define LCD_SHORT_DELAY()           delay( 5 )
+#define LCD_LONG_DELAY()            delay( 7 )
 
 
 
@@ -90,9 +90,13 @@ void lcd_instReg( unsigned char i )
 
     LCD_EN( 0 );
     if( i == LCD_CLEAR_DISPLAY || i == LCD_RETURN_HOME )
+    {
         LCD_LONG_DELAY();
+    }
     else
+    {
         LCD_SHORT_DELAY();
+    }
     LCD_EN( 1 );
     
 
@@ -109,9 +113,13 @@ void lcd_instReg( unsigned char i )
     LCD_BUS( i<<4 );
     LCD_EN( 0 );
     if( i == LCD_CLEAR_DISPLAY || i == LCD_RETURN_HOME )
+    {
         LCD_LONG_DELAY();
+    }
     else
+    {
         LCD_SHORT_DELAY();
+    }
     LCD_EN( 1 );
 }
 

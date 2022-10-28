@@ -53,14 +53,14 @@ unsigned char keyboard( void )
         // keyb_serialIO_scan();
         // keyb_serialIO_scan();
         // keyb_serialIO_scan();
-        serial_io_scan(&keyboard_drv);
-        serial_io_scan(&keyboard_drv);
+        // serial_io_scan(&keyboard_drv);
+        // serial_io_scan(&keyboard_drv);
         serial_io_scan(&keyboard_drv);
         for( c=0; c<NUM_COL; c++ )
         {
 //            keyb_serialIO_scan();
             if( keyb_in & (C0_MASK<<c) )
-                aux = tecladoMatriz[c][l];
+                aux = tecladoMatriz[l][c];
         }
     }   
     return( aux );
