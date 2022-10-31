@@ -4,4 +4,5 @@ idf_component_register(SRCS "testaPerifericos.c"
                     REQUIRES serial_io
                     REQUIRES lcd
                     REQUIRES keyboard
+                    REQUIRES digital_io
                     INCLUDE_DIRS ".")
