@@ -2,6 +2,6 @@
 #define KEYBOARD_H
 
 void keyboard_init( void );
-unsigned char keyboard( void );
+uint8_t keyboard( void );
 
 #endif

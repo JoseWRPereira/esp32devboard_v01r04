@@ -21,8 +21,8 @@ SERIAL_OUT lcd_drv = {  SERIAL_IO_LCD_CK_PIN,
 
 void delay( unsigned int t )
 {
-    vTaskDelay( t / portTICK_PERIOD_MS);
-    // vTaskDelay( pdMS_TO_TICKS( t ));
+    // vTaskDelay( t / portTICK_PERIOD_MS);
+    vTaskDelay( pdMS_TO_TICKS( t ));
 }
 
 //****************** Interface com PORTs/Pinos
@@ -33,8 +33,8 @@ void delay( unsigned int t )
 #define LCD_COLS        16
 // __delay_ms( 2 );
 // __delay_us( 40 );
-#define LCD_SHORT_DELAY()           delay( 5 )
-#define LCD_LONG_DELAY()            delay( 7 )
+#define LCD_SHORT_DELAY()           delay( 8 )
+#define LCD_LONG_DELAY()            delay( 8 )
 
 
 
