@@ -11,6 +11,8 @@
 #include "lwip/err.h"
 #include "lwip/sys.h"
 
+#include "digital_io.h"
+
 /* The examples use WiFi configuration that you can set via project configuration menu.
    If you'd rather not, just change the below entries to strings with
    the config you want - ie #define EXAMPLE_WIFI_SSID "mywifissid"
@@ -98,36 +100,6 @@ void nvs_init(void)
     ESP_LOGI(TAG, "ESP_WIFI_MODE_AP");
 }
 
-/*
-static esp_err_t get_handler(httpd_req_t *req)
-{
-    char *response_message = "<!DOCTYPE HTML><html><head>\
-                                <title>Static HTML page</title>\
-                                <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
-                                </head><body>\
-                                <h1>This is static HTML page</h1>\
-                                </form><br>\
-                                </body></html>";
-    httpd_resp_send(req, response_message, HTTPD_RESP_USE_STRLEN);
-    return ESP_OK;
-}
-
-void server_initiation()
-{
-    httpd_config_t server_config = HTTPD_DEFAULT_CONFIG();
-    httpd_handle_t server_handle = NULL;
-    httpd_start(&server_handle, &server_config);
-
-    httpd_uri_t uri_get = {
-        .uri = "/",
-        .method = HTTP_GET,
-        .handler = get_handler,
-        .user_ctx = NULL};
-    httpd_register_uri_handler(server_handle, &uri_get);
-}
-*/
-
-
 
 esp_err_t get_handler(httpd_req_t *req)
 {
@@ -165,7 +137,7 @@ esp_err_t get_handler_str(httpd_req_t *req)
     }
 
     // Read the URI line and get the parameters
-     buf_len = httpd_req_get_url_query_len(req) + 1;
+    buf_len = httpd_req_get_url_query_len(req) + 1;
     if (buf_len > 1) {
         buf = malloc(buf_len);
         if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
@@ -176,6 +148,21 @@ esp_err_t get_handler_str(httpd_req_t *req)
             }
             if (httpd_query_key_value(buf, "int", param, sizeof(param)) == ESP_OK) {
                 ESP_LOGI(TAG, "The int value = %s", param);
+            }
+            if (httpd_query_key_value(buf, "K1", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(TAG, "The K1 value = %s", param);
+                if( param[0] == '1')
+                    digital_out.bits.rl0 = 1;
+                if( param[0] == '0')
+                    digital_out.bits.rl0 = 0;
+            }
+            if (httpd_query_key_value(buf, "K2", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(TAG, "The K2 value = %s", param);
+                ESP_LOGI(TAG, "The K2 carac = %c", param[0]);
+                if( param[0] == '1')
+                    digital_out.bits.rl1 = 1;
+                if( param[0] == '0')
+                    digital_out.bits.rl1 = 0;
             }
         }
         free(buf);

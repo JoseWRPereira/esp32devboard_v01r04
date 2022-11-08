@@ -20,7 +20,7 @@ void app_main(void)
 
     vTaskDelay(1000/portTICK_PERIOD_MS);
     
-    // digital_io_init();
+    digital_io_init();
     // lcd_init();
     // keyboard_init();
 
@@ -36,7 +36,7 @@ void app_main(void)
         vTaskDelay(1000/portTICK_PERIOD_MS);
 
 
-        // digital_io_scan();
+        digital_io_scan();
         // digital_out.data = digital_in.data;
 
     //     // tecla = keyboard();

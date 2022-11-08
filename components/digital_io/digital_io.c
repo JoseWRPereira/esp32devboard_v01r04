@@ -7,8 +7,9 @@
 #define DGITAL_IO_DO_PIN      27
 #define DGITAL_IO_LD_PIN      14
 
-DIGITAL_IN digital_in;
-DIGITAL_OUT digital_out;
+
+DigitalIn digital_in;
+DigitalOut digital_out;
 
 SERIAL_IO digital_io =  {   
                             DGITAL_IO_CK_PIN,

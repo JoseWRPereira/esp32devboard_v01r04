@@ -1,7 +1,7 @@
 #ifndef DIGITAL_IO_H
 #define DIGITAL_IO_H
 
-struct digital_in_t
+struct DigitalIn_t
 {
     int8_t e0:1;
     int8_t e1:1;
@@ -13,7 +13,7 @@ struct digital_in_t
     int8_t e7:1;
 };
 
-struct digital_out_t
+struct DigitalOut_t
 {
     int8_t rl0:1;
     int8_t rl1:1;
@@ -25,20 +25,20 @@ struct digital_out_t
     int8_t s4:1;
 };
 
-typedef union digital_in_u
+typedef union DigitalIn_u
 {
-    struct digital_in_t bits;
+    struct DigitalIn_t bits;
     uint8_t data;
-} DIGITAL_IN;
+} DigitalIn;
 
-typedef union digital_ou_u
+typedef union DigitalOut_u
 {
-    struct digital_out_t bits;
+    struct DigitalOut_t bits;
     uint8_t data;
-} DIGITAL_OUT;
+} DigitalOut;
 
-extern DIGITAL_IN digital_in;
-extern DIGITAL_OUT digital_out;
+extern DigitalIn digital_in;
+extern DigitalOut digital_out;
 
 void digital_io_init( void );
 void digital_io_scan( void );
