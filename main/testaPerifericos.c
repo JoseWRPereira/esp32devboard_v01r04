@@ -32,11 +32,11 @@ void app_main(void)
 
     while( 1 )
     {
-        gpio_set_level(GPIO_NUM_2, !gpio_get_level(GPIO_NUM_2));
-        vTaskDelay(1000/portTICK_PERIOD_MS);
+        gpio_set_level(GPIO_NUM_2, digital_out.bits.rl1);
+        vTaskDelay(100/portTICK_PERIOD_MS);
 
 
-        digital_io_scan();
+        // digital_io_scan();
         // digital_out.data = digital_in.data;
 
     //     // tecla = keyboard();

@@ -155,37 +155,191 @@ esp_err_t get_handler_str(httpd_req_t *req)
                     digital_out.bits.rl0 = 1;
                 if( param[0] == '0')
                     digital_out.bits.rl0 = 0;
+                digital_io_scan();
             }
             if (httpd_query_key_value(buf, "K2", param, sizeof(param)) == ESP_OK) {
                 ESP_LOGI(TAG, "The K2 value = %s", param);
-                ESP_LOGI(TAG, "The K2 carac = %c", param[0]);
                 if( param[0] == '1')
                     digital_out.bits.rl1 = 1;
                 if( param[0] == '0')
                     digital_out.bits.rl1 = 0;
+                digital_io_scan();
             }
         }
         free(buf);
     }
 
     // The response
-    const char resp[] = "The data was sent ...";
+    // const char resp[] = "The data was sent ...";
+    // httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
+    return ESP_OK;
+}
+
+
+
+
+
+
+
+
+
+esp_err_t get_handler_entradas(httpd_req_t *req)
+{
+/*
+    const char resp1[] = "<!DOCTYPE HTML><html><head>\
+                            <title>ESP Input Form</title>\
+                            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
+                            </head>\
+                            <body>\
+                            E0 = 1;\
+                            </body></html>";
+    const char resp0[] = "<!DOCTYPE HTML><html><head>\
+                            <title>ESP Input Form</title>\
+                            <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
+                            </head>\
+                            <body>\
+                            E0 = 0;\
+                            </body></html>";
+*/
+    // const char resp0[] = "E0 = 0;";
+    // const char resp1[] = "E0 = 1;";
+    // char resp[] = "E:0b________";
+
+    char resp[] = "<!DOCTYPE HTML>\
+<html><head><title>ESP32 Dev. Board</title>\
+<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\
+</head><body><center>\
+<h1>SAEP 2023</h1><hr><br>\
+Entradas:<br>\
+<h2>0 b _ _ _ _ _ _ _ _</h2><br>\
+Saidas\
+<h2>\
+<form action=\"/saidas\">\
+<input type=\"checkbox\" name=\"K1\" value=\"1\" checke >\
+<label for=\"K1\">K1</label>\
+<input type=\"checkbox\" name=\"K2\" value=\"1\" checke >\
+<label for=\"K2\">K2</label>\
+</h2>\
+<br>\
+<input type=\"submit\" value=\"Atualizar\">\
+</form>\
+</center>\
+</body>\
+</html>";
+
+
+
+    digital_io_scan();
+
+    resp[194] = digital_in.bits.e7 ? '1':'0';
+    resp[196] = digital_in.bits.e6 ? '1':'0';
+    resp[198] = digital_in.bits.e5 ? '1':'0';
+    resp[200] = digital_in.bits.e4 ? '1':'0';
+    resp[202] = digital_in.bits.e3 ? '1':'0';
+    resp[204] = digital_in.bits.e2 ? '1':'0';
+    resp[206] = digital_in.bits.e1 ? '1':'0';
+    resp[208] = digital_in.bits.e0 ? '1':'0';
+
+    resp[300] = digital_out.bits.rl0 ? 'd':' ';
+    resp[377] = digital_out.bits.rl1 ? 'd':' ';
+
+    ESP_LOGI(TAG, "The checkeD %c %c %c", resp[299], resp[300], resp[301]);
+    ESP_LOGI(TAG, "The checkeD %c %c %c", resp[376], resp[377], resp[378]);
+
+
     httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
     return ESP_OK;
 }
+
+
+esp_err_t get_handler_saidas(httpd_req_t *req)
+{
+    // Read the URI line and get the host
+    char *buf;
+    size_t buf_len;
+    buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
+    if (buf_len > 1)
+    {
+        buf = malloc(buf_len);
+        if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK)
+        {
+            ESP_LOGI(TAG, "Host: %s", buf);
+        }
+        free(buf);
+    }
+
+    // Read the URI line and get the parameters
+    buf_len = httpd_req_get_url_query_len(req) + 1;
+    if (buf_len > 1) {
+        buf = malloc(buf_len);
+        if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) {
+            ESP_LOGI(TAG, "Found URL query: %s", buf);
+            char param[32];
+            if (httpd_query_key_value(buf, "K1", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(TAG, "The K1 value = %s", param);
+                // if( param[0] == '1')
+                    digital_out.bits.rl0 = 1;
+                // if( param[0] == '0')
+                    // digital_out.bits.rl0 = 0;
+            }
+            else
+            {
+                digital_out.bits.rl0 = 0;
+            }
+
+            if (httpd_query_key_value(buf, "K2", param, sizeof(param)) == ESP_OK) {
+                ESP_LOGI(TAG, "The K2 value = %s", param);
+                // if( param[0] == '1')
+                    digital_out.bits.rl1 = 1;
+                // if( param[0] == '0')
+                //     digital_out.bits.rl1 = 0;
+            }
+            else
+            {
+                digital_out.bits.rl1 = 0;
+            }
+        }
+        free(buf);
+    }
+    else
+    {
+        digital_out.bits.rl0 = 0;
+        digital_out.bits.rl1 = 0;
+    }
+    digital_io_scan();
+
+    get_handler_entradas(req);
+    return ESP_OK;
+}
+
+
+
+
+
+
+
 
 /* URI handler structure for GET /uri */
 httpd_uri_t uri_get = {
     .uri = "/",
     .method = HTTP_GET,
-    .handler = get_handler,
+    .handler = get_handler_entradas,
     .user_ctx = NULL};
 
-httpd_uri_t uri_get_input = {
-    .uri = "/get",
+httpd_uri_t uri_get_saidas= {
+    .uri = "/saidas",
     .method = HTTP_GET,
-    .handler = get_handler_str,
+    .handler = get_handler_saidas,
     .user_ctx = NULL};
+
+httpd_uri_t uri_get_entradas = {
+    .uri = "/entradas",
+    .method = HTTP_GET,
+    .handler = get_handler_entradas,
+    .user_ctx = NULL};
+
+
+
 
 httpd_handle_t start_webserver(void)
 {
@@ -194,7 +348,8 @@ httpd_handle_t start_webserver(void)
     if (httpd_start(&server, &config) == ESP_OK)
     {
         httpd_register_uri_handler(server, &uri_get);
-        httpd_register_uri_handler(server, &uri_get_input);
+        httpd_register_uri_handler(server, &uri_get_saidas);
+        httpd_register_uri_handler(server, &uri_get_entradas);
     }
     return server;
 }
