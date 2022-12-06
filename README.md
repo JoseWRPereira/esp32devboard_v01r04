@@ -65,3 +65,12 @@ idf.py -p <port> monitor
 # Limpeza da compilação
 idf.py fullclean
 ```
+
+
+# Referências
+
+* [ESP-IDF Programming Guide](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/index.html)
+
+* [Franzininho - Criando componentes no ESP-IDF e configurações - Com Pedro Minatel](https://youtu.be/FgAqc4kLFzI)
+
+* [Embedded Hacks - ESP-IDF What is a Component | How to add a component in ESP32](https://youtu.be/COB_vBtTdiY)

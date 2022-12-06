@@ -2,6 +2,15 @@
 #ifndef LCD_H
 #define LCD_H
 
+#include "hal_types.h"
+// typedef struct lcdT
+// {
+//     void (* init)(void);
+//     void (* print)( unsigned char lin, unsigned char col, char * str );
+// } Lcd;
+
+extern Lcd lcd;
+
 void lcd_init( void );
 void lcd_clr( void );
 // void lcd_print( unsigned char lin, unsigned char col, const char * str );

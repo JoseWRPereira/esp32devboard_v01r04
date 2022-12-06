@@ -1,11 +1,7 @@
 #include <stdio.h>
+#include "pinout.h"
 #include "digital_io.h"
 #include "serial_io.h"
-
-#define DGITAL_IO_CK_PIN      12
-#define DGITAL_IO_DI_PIN      13
-#define DGITAL_IO_DO_PIN      27
-#define DGITAL_IO_LD_PIN      14
 
 
 DigitalIn digital_in;
@@ -31,6 +27,3 @@ void digital_io_scan( void )
 {
     serial_io_scan(&digital_io);
 }
-
-
-

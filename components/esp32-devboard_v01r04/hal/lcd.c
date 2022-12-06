@@ -1,19 +1,20 @@
 #include <stdio.h>
+#include "pinout.h"
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "lcd.h"
 #include "serial_io.h"
 
-// LCD
-#define SERIAL_IO_LCD_CK_PIN        17
-#define SERIAL_IO_LCD_DO_PIN        18
-#define SERIAL_IO_LCD_LD_PIN        5
-unsigned char lcd = 0;
-SERIAL_OUT lcd_drv = {  SERIAL_IO_LCD_CK_PIN,
-                        SERIAL_IO_LCD_DO_PIN,
-                        SERIAL_IO_LCD_LD_PIN,
-                        &lcd,
+
+Lcd lcd;
+
+
+unsigned char lcdbus = 0;
+SERIAL_OUT lcd_drv = {  LCD_CK_PIN,
+                        LCD_DO_PIN,
+                        LCD_LD_PIN,
+                        &lcdbus,
                         1
                     };
 
@@ -26,9 +27,9 @@ void delay( unsigned int t )
 }
 
 //****************** Interface com PORTs/Pinos
-#define LCD_BUS( x )    lcd = ((lcd & 0x0F) | (x & 0xF0)), serial_out_scan(&lcd_drv)
-#define LCD_EN( x )     lcd = x ? (lcd | 0x08) : (lcd & ~0x08), serial_out_scan(&lcd_drv)
-#define LCD_RS( x )     lcd = x ? (lcd | 0x04) : (lcd & ~0x04)
+#define LCD_BUS( x )    lcdbus = ((lcdbus & 0x0F) | (x & 0xF0)), serial_out_scan(&lcd_drv)
+#define LCD_EN( x )     lcdbus = x ? (lcdbus | 0x08) : (lcdbus & ~0x08), serial_out_scan(&lcd_drv)
+#define LCD_RS( x )     lcdbus = x ? (lcdbus | 0x04) : (lcdbus & ~0x04)
 #define LCD_ROWS        2
 #define LCD_COLS        16
 // __delay_ms( 2 );
@@ -157,7 +158,7 @@ void lcd_lincol( unsigned char lin, unsigned char col)
 void lcd_init( void )
 {
     delay(250);
-    lcd = 0;
+    lcdbus = 0;
     serial_out_init( &lcd_drv );
 
     delay(250);
@@ -270,3 +271,6 @@ void num2str( int num, char * pos )
         mask /= 10;
     }
 }
+
+
+

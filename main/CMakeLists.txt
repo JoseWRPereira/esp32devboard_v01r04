@@ -1,9 +1,4 @@
 idf_component_register(SRCS "testaPerifericos.c"
                     REQUIRES driver
-                    REQUIRES piscaLed
-                    REQUIRES serial_io
-                    REQUIRES lcd
-                    REQUIRES keyboard
-                    REQUIRES digital_io
-                    REQUIRES wifi
+                    REQUIRES esp32-devboard_v01r04
                     INCLUDE_DIRS ".")

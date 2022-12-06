@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "pinout.h"
 #include "driver/gpio.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -6,19 +7,14 @@
 #include "serial_io.h"
 
 
-// KEYBOARD
-#define SERIAL_IO_KEYBOARD_CK_PIN        4
-#define SERIAL_IO_KEYBOARD_DI_PIN        15
-#define SERIAL_IO_KEYBOARD_DO_PIN        16
-#define SERIAL_IO_KEYBOARD_LD_PIN        2
 uint8_t keyb_in  = 0;
 uint8_t keyb_out = 0;
 SERIAL_IO keyboard_drv = 
                     {   
-                        SERIAL_IO_KEYBOARD_CK_PIN,
-                        SERIAL_IO_KEYBOARD_DI_PIN,
-                        SERIAL_IO_KEYBOARD_DO_PIN,
-                        SERIAL_IO_KEYBOARD_LD_PIN,
+                        KEYBOARD_CK_PIN,
+                        KEYBOARD_DI_PIN,
+                        KEYBOARD_DO_PIN,
+                        KEYBOARD_LD_PIN,
                         &keyb_in,
                         &keyb_out,
                         1
