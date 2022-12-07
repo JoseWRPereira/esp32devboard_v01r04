@@ -82,8 +82,8 @@ void delay( unsigned int t )
 
 
 
-//**************************************************************
-// Envia uma instrução para o display (Instruction Register)
+/// @brief Envia uma instrução para o display (Instruction Register)
+/// @param i Instrução a ser enviada ao display
 void lcd_instReg( unsigned char i )
 {
     LCD_RS( 0 );
@@ -125,8 +125,9 @@ void lcd_instReg( unsigned char i )
 }
 
 
-//**************************************************************
-// Envia um caractere para o display (Data Register))
+
+/// @brief Envia um caractere para o display (Data Register))
+/// @param d Dado/caractere a ser impresso no display
 void lcd_dataReg( unsigned char d )
 {
     LCD_RS( 1 );
@@ -143,8 +144,10 @@ void lcd_dataReg( unsigned char d )
 }
 
 
-//**************************************************************
-// Posicionar o cursor na coordenada: (linha, coluna)
+
+/// @brief Posicionar o cursor na coordenada: (linha, coluna)
+/// @param lin linha do display: começa em 0
+/// @param col coluna do display: começa em 0
 void lcd_lincol( unsigned char lin, unsigned char col)
 {
     lcd_instReg( LCD_SET_DDRAM_ADDRS( ((LCD_ADDR_LINE_1 * lin) + (col + LCD_ADDR_LINE_0)) ) );
@@ -152,9 +155,9 @@ void lcd_lincol( unsigned char lin, unsigned char col)
 
 
 
-//**************************************************************
-// Inicializa os pinos conectados ao display e em seguida
-// o proprio display
+
+/// @brief Inicializa os pinos conectados ao display e em seguida o proprio display
+/// @param - 
 void lcd_init( void )
 {
     delay(250);
@@ -172,8 +175,8 @@ void lcd_init( void )
 
 
 
-//**************************************************************
-// Apaga todos os caracteres no display
+/// @brief Limpa conteudo do display LCD.
+/// @param  -
 void lcd_clr( void )
 {
     lcd_instReg(LCD_CLEAR_DISPLAY);
@@ -181,12 +184,10 @@ void lcd_clr( void )
 
 
 
-//**************************************************************
-// Escreve uma string na (linha,coluna) do display
-// Uso: 
-//      lcd_print(0,0,"string");
-//
-// void lcd_print( unsigned char lin, unsigned char col, const char * str )
+/// @brief Escreve uma string na (linha,coluna) do display
+/// @param lin Posição linha a inserir string
+/// @param col Posição coluna a inserir string
+/// @param str String a ser exibida no display a partir da posição (li, col)
 void lcd_print( unsigned char lin, unsigned char col, char * str )
 {
     char pos = col;
@@ -201,16 +202,11 @@ void lcd_print( unsigned char lin, unsigned char col, char * str )
 }
 
 
-//**************************************************************
-// Escreve um número inteiro no display
-// Uso: 
-//      lcd_num( 0, 0, var, 3 );
-//
-// Obs: O 3 significa o número de espaços usados no display para 
-// a impressão da variavel var.
-//
-// void lcd_num(  unsigned char lin, unsigned char col,
-//                     int num, unsigned char tam )
+/// @brief Escreve um número inteiro no display
+/// @param lin Posição linha
+/// @param col Posição coluna
+/// @param num Número a ser impresso
+/// @param tam Quantidade de caracteres que o número ocupa
 void lcd_num( uint8_t lin, uint8_t col,
                     int16_t num, uint8_t tam )
 {
@@ -253,6 +249,10 @@ void lcd_num( uint8_t lin, uint8_t col,
     }
 }
 
+
+/// @brief Converte um número inteiro em uma string
+/// @param num Número
+/// @param pos Apontar local a ser inserida a string
 void num2str( int num, char * pos )
 {
     int mask = 10000;

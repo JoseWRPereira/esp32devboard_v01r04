@@ -120,6 +120,7 @@ typedef struct globalT
 ///////////////////////////////////////// DevBoard
 /////////////////////////////////////////
 
+/// @brief Declaração dos objetos que compoem o objeto principal.
 typedef struct devboardT
 {
     Global global;

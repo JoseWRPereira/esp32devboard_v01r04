@@ -15,7 +15,11 @@
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-
+/// @brief  Produz borda no pino de carregamento de dados do
+///         registrador de deslocamento (74165), efetuando a 
+///         leitura de 8 bits.
+/// @param ptrSerial_io Ponteiro para estrutura de dados da 
+///         comunicação serial via CI 74165.
 void serial_in_load( SERIAL_IN * ptrSerial_io )
 {
     SERIAL_IO_LD(0);
@@ -36,7 +40,13 @@ void serial_io_load( SERIAL_IO * ptrSerial_io )
 //////////////////////////////////////////
 //////////////////////////////////////////
 
-
+/// @brief  Executa o deslocamento de 8 bits, carregados
+//          no registrador de deslocamento 74165, de forma 
+///         serial, lendo-os e armazenando-os em uma variável.
+/// @param ptrSerial_io Ponteiro para a estrutura de dados 
+///         de comunicação com CI 74165.
+/// @return Dado lido (8-bits) e disponibilizados como 
+///         variável de retorno.
 unsigned char serial_in_byteShift( SERIAL_IN * ptrSerial_io )
 {
     unsigned char dataBit = 0x80;
@@ -95,6 +105,15 @@ unsigned char serial_io_byteShift( SERIAL_IO * ptrSerial_io, unsigned char dataO
 //////////////////////////////////////////
 //////////////////////////////////////////
 
+/// @brief  Realiza o processo de transferência serial de dados 
+///         de entrada e de saída de forma simultânea. Tais dados
+///         estão contidos na estrutura apontada pelo @param
+///         O processo de transferência ocorre utilizando CI's 
+///         registradores de deslocamento, que convertem dados
+///         entre os formatos serial/paralelo (74595) e 
+///         paralelo/serial (74165). 
+/// @param ptrSerial_io Ponteiro para a estrutura de dados 
+///         de comunicação com CI 74165.
 void serial_in_scan( SERIAL_IN * ptrSerial_io )
 {
     unsigned char i;
@@ -134,6 +153,11 @@ void serial_io_scan( SERIAL_IO * ptrSerial_io )
 //////////////////////////////////////////
 //////////////////////////////////////////
 
+
+/// @brief  Configuração e inicialização de pinos de interface com
+///         CI de conversão paralelo/serial (74165).
+/// @param ptrSerial_io Ponteiro para a estrutura de dados 
+///         de comunicação com CI 74165.
 void serial_in_init( SERIAL_IN * ptrSerial_io )
 {
     gpio_reset_pin( ptrSerial_io->ck_pin );
@@ -183,5 +207,6 @@ void serial_io_init( SERIAL_IO * ptrSerial_io )
     SERIAL_IO_DO( 0 );
     SERIAL_IO_LD( 1 );
 }
+
 //////////////////////////////////////////
 //////////////////////////////////////////
