@@ -2,6 +2,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp32-devboard_v01r04.h"
+#include "wifi-ap-webserver.h"
 
 void app_main(void)
 {
@@ -10,6 +11,7 @@ void app_main(void)
     vTaskDelay(500/portTICK_PERIOD_MS);
 
     devboard.global.init();
+    wifi_init();
     vTaskDelay(500/portTICK_PERIOD_MS);
 
     devboard.lcd.print(0,0,lin0);
