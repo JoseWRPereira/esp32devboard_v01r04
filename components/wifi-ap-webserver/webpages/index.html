@@ -1,0 +1,131 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>ESP32 Devboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <style>
+        h1  {   text-align: center; }
+        h4  {   text-align: center;
+                margin: auto;   }
+        hr  {   border: 1px solid #ccc;
+                width: 80%; }
+        .box{   text-align: center;
+                margin-left: 25%;
+                margin-right: 25%;
+                margin-bottom: 2px; }
+        table{  width: 95%;
+                table-layout: fixed;
+                text-align: center;
+                margin-left: auto;
+                margin-right: auto; }
+        td, th {margin: 0;
+                text-align: center; }
+        td {    padding-bottom: 12px;   }
+        @media (max-width: 600px)
+        {
+            .box{   margin-left: 10%;
+                    margin-right: 10%;  }
+            th{ font-size: 85%; }
+        }
+
+    </style>
+<header>
+<h1>ESP32 Devboard</h1>
+</header>
+<div class="box">
+    <h4>Entradas</h4>
+    <table>
+        <tr>
+          <th>E0</th>
+          <th>E1</th>
+          <th>E2</th>
+          <th>E3</th>
+          <th>E4</th>
+          <th>E5</th>
+          <th>E6</th>
+          <th>E7</th>
+        </tr>
+        <tr>
+          <td><input type="radio" name="E0" disabled checked></td>
+          <td><input type="radio" name="E2" disabled checked></td>
+          <td><input type="radio" name="E1" disabled checked></td>
+          <td><input type="radio" name="E3" disabled checked></td>
+          <td><input type="radio" name="E4" disabled checke ></td>
+          <td><input type="radio" name="E5" disabled checke ></td>
+          <td><input type="radio" name="E6" disabled checke ></td>
+          <td><input type="radio" name="E7" disabled checke ></td>
+        </tr>
+    </table> 
+    <form action="/entradas">
+        <input type="submit" value="Ler entradas">
+    </form>
+</div>
+<hr>
+<div class="box">
+    <h4>Saídas</h4>
+    <form action="/saidas">
+        <table>
+            <tr>
+              <th>K1</th>
+              <th>K2</th>
+              <th>CA0</th>
+              <th>CA1</th>
+              <th>S1</th>
+              <th>S2</th>
+              <th>S3</th>
+              <th>S4</th>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="K1"  value="1" checke ></td>
+              <td><input type="checkbox" name="K2"  value="1" checke ></td>
+              <td><input type="checkbox" name="CA0" value="1" checke ></td>
+              <td><input type="checkbox" name="CA1" value="1" checke ></td>
+              <td><input type="checkbox" name="S1"  value="1" checke ></td>
+              <td><input type="checkbox" name="S2"  value="1" checke ></td>
+              <td><input type="checkbox" name="S3"  value="1" checke ></td>
+              <td><input type="checkbox" name="S4"  value="1" checke ></td>
+            </tr>
+        </table> 
+        <input type="submit" value="Atualizar Saidas">
+    </form>
+</div>
+<hr>
+<div class="box">
+    <h4>Motor de passo</h4>
+    <form action="/motorpasso">
+        <input type="submit" value="Girar">
+        <input type="text" name="graus" value="360" maxlength="4" size="4">
+        <label>graus.</label>
+    </form>
+</div>
+<hr>
+<div class="box">
+    <h4>Ambiente</h4>
+    <form action="/tempumid">
+        <table>
+            <tr>
+              <th>Temperatura</th>
+              <th>Umidade</th>
+            </tr>
+            <tr>
+              <td>20 &deg;C</td>
+              <td>50 %</td>
+            </tr>
+        </table> 
+        <input type="submit" value="Atualizar">
+    </form>
+</div>
+<hr>
+<div class="box">
+    <h4>Display</h4>
+    <form action="/display">
+        <input type="text" name="graus" value="Arri Egua!" maxlength="16" size="16">
+        <input type="submit" value="Enviar">
+    </form>
+</div>
+<hr>
+<hr>
+</body>
+</html>

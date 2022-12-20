@@ -2,6 +2,7 @@
 // #include <string.h>
 #include "esp_http_server.h"
 #include "wifi-ap-webserver.h"
+#include "string.h"
 
 
 
@@ -35,9 +36,30 @@ httpd_uri_t uri_test =
     .user_ctx = NULL
 };
 
+esp_err_t get_devboard(httpd_req_t *req)
+{
+    const char resp[] = "<h2>devboard</h2>";
+    const char resp2[] = "<h2>devboard2</h2>";
+    httpd_resp_set_status(req, "200 OK"); //      HTTP status string, 
+    httpd_resp_set_type(req,"text/html");   //      Content Type
+    httpd_resp_set_hdr(req,"charset","utf-8");    //  
+    httpd_resp_sendstr_chunk(req,resp);
+    httpd_resp_sendstr_chunk(req,resp2);
+    httpd_resp_sendstr_chunk(req,NULL);
+//    httpd_resp_send_chunk(req, resp2, HTTPD_RESP_USE_STRLEN );
+    // httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
+    return ESP_OK;
+}
+httpd_uri_t uri_devboard = 
+{
+    .uri = "/devboard",
+    .method = HTTP_GET,
+    .handler = get_devboard,
+    .user_ctx = NULL
+};
 
 
-httpd_uri_t * uri_vector[] = { &uri_example, &uri_test };
+httpd_uri_t * uri_vector[] = { &uri_example, &uri_test, &uri_devboard };
 size_t uri_vector_number_of_elements = sizeof(uri_vector)/sizeof(uri_vector[0]);
 
 
