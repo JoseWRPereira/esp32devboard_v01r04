@@ -20,8 +20,15 @@ void app_main(void)
 
     while( 1 )
     {
-        devboard.digital.output->data = devboard.digital.input->data;
-        devboard.digital.scan();
-        vTaskDelay(30/portTICK_PERIOD_MS);
+        // devboard.digital.output->data = devboard.digital.input->data;
+        // devboard.digital.scan();
+        // vTaskDelay(30/portTICK_PERIOD_MS);
+        devboard.stepmotor.passos(48, 1);
+        vTaskDelay(100);
+        devboard.stepmotor.passos(96, 0);
+        vTaskDelay(100);
+        // vTaskDelay(300/portTICK_PERIOD_MS);
+        // devboard.stepmotor.passos(200, 0);
+        // vTaskDelay(300/portTICK_PERIOD_MS);
     }
 }

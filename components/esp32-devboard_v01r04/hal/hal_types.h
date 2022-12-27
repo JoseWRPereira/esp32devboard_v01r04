@@ -107,6 +107,17 @@ typedef struct keyboardT
     uint8_t (* key)( void );
 } Keyboard;
 
+
+/////////////////////////////////////////
+///////////////////////////////////////// StepMotor
+/////////////////////////////////////////
+typedef struct stepmotorT
+{
+    void (* init)( void );
+    void (* passos)(uint32_t passos, uint8_t dir);
+} Stepmotor;
+
+
 /////////////////////////////////////////
 ///////////////////////////////////////// Global
 /////////////////////////////////////////
@@ -127,6 +138,7 @@ typedef struct devboardT
     Lcd lcd;
     Digital digital;
     Keyboard keyboard;
+    Stepmotor stepmotor;
  } Devboard;
 
 

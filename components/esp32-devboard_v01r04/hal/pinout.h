@@ -15,5 +15,8 @@
 #define LCD_DO_PIN                      18
 #define LCD_LD_PIN                      5
 
+#define STEPMOTOR_SLEEP_PIN             22
+#define STEPMOTOR_STEP_PIN              21
+#define STEPMOTOR_DIR_PIN               19
 
 #endif

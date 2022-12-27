@@ -36,18 +36,232 @@ httpd_uri_t uri_test =
     .user_ctx = NULL
 };
 
+
+
+
+
+void add_str( char * destino, char * str )
+{
+    char i = 0;
+    while( *(str+i) )
+    {
+        *(destino+i) = *(str+i);
+        i++;
+    }
+}
+void add_radio( char * str, char * name, uint8_t check )
+{
+    str[30] = name[0];
+    str[31] = name[1];
+    if( check )
+        str[49] = 'd';
+    else
+        str[49] = ' ';
+}
+
+void add_form_action( char * str, char * uri)
+{
+    char i = 0;
+    char str_offset = 13;
+    while( *(uri+i) )
+    {
+        *(str+str_offset+i) = *(uri+i);
+        i++;
+        if( i > 16 )
+            break;
+    }
+}
+
+void add_str_submit( char * str, char * value )
+{
+    char i = 0;
+    char str_offset = 27;
+    while( *(value+i) )
+    {
+        *(str+str_offset+i) = *(value+i);
+        i++;
+        if( i > 16 )
+            break;
+    }
+}
+
+
+char tag_div_class_box[] = "<div class=\"box\"><h4>                </h4>";
+char tag_table_tr[] = "<table><tr>";
+char tag_table_tr_tr[] = "</tr><tr>";
+char tab_table_th[] = "<th>   </th>";
+char tab_input_radio[] = "<td><input type=\"radio\" name=\"  \" disabled checke ></td>";
+char tab_table_end[] = "</tr></table>";
+char tab_form_action[] = "<form action=                >";
+char tab_input_submit[] = "<input type=\"submit\" value=\"Ler entradas\">";
+char tab_div_end[] = "</form></div><hr>";
+
+
+
 esp_err_t get_devboard(httpd_req_t *req)
 {
-    const char resp[] = "<h2>devboard</h2>";
-    const char resp2[] = "<h2>devboard2</h2>";
-    httpd_resp_set_status(req, "200 OK"); //      HTTP status string, 
-    httpd_resp_set_type(req,"text/html");   //      Content Type
-    httpd_resp_set_hdr(req,"charset","utf-8");    //  
-    httpd_resp_sendstr_chunk(req,resp);
-    httpd_resp_sendstr_chunk(req,resp2);
+
+/*
+
+const char html_box_entradas[] = "<div class=\"box\">\
+    <h4>Entradas</h4>\
+    <table>\
+        <tr>\
+          <th>E0</th>\
+          <th>E1</th>\
+          <th>E2</th>\
+          <th>E3</th>\
+          <th>E4</th>\
+          <th>E5</th>\
+          <th>E6</th>\
+          <th>E7</th>\
+        </tr>\
+        <tr>\
+          <td><input type=\"radio\" name=\"E0\" disabled checked></td>\
+          <td><input type=\"radio\" name=\"E2\" disabled checked></td>\
+          <td><input type=\"radio\" name=\"E1\" disabled checked></td>\
+          <td><input type=\"radio\" name=\"E3\" disabled checked></td>\
+          <td><input type=\"radio\" name=\"E4\" disabled checke ></td>\
+          <td><input type=\"radio\" name=\"E5\" disabled checke ></td>\
+          <td><input type=\"radio\" name=\"E6\" disabled checke ></td>\
+          <td><input type=\"radio\" name=\"E7\" disabled checke ></td>\
+        </tr>\
+    </table>\
+    <form action=\"/entradas\">\
+        <input type=\"submit\" value=\"Ler entradas\">\
+    </form>\
+</div>\
+<hr>";
+
+const char html_box_saidas[] = "<div class=\"box\">\
+    <h4>Saídas</h4>\
+    <form action=\"/saidas\">\
+        <table>\
+            <tr>\
+              <th>K1</th>\
+              <th>K2</th>\
+              <th>CA0</th>\
+              <th>CA1</th>\
+              <th>S1</th>\
+              <th>S2</th>\
+              <th>S3</th>\
+              <th>S4</th>\
+            </tr>\
+            <tr>\
+              <td><input type=\"checkbox\" name=\"K1\"  value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"K2\"  value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"CA0\" value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"CA1\" value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"S1\"  value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"S2\"  value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"S3\"  value=\"1\" checke ></td>\
+              <td><input type=\"checkbox\" name=\"S4\"  value=\"1\" checke ></td>\
+            </tr>\
+        </table>\
+        <input type=\"submit\" value=\"Atualizar Saidas\">\
+    </form>\
+</div>\
+<hr>";
+
+const char html_box_motorpasso[] = "<div class=\"box\">\
+    <h4>Motor de passo</h4>\
+    <form action=\"/motorpasso\">\
+        <input type=\"submit\" value=\"Girar\">\
+        <input type=\"text\" name=\"graus\" value=\"360\" maxlength=\"4\" size=\"4\">\
+        <label>graus.</label>\
+    </form>\
+</div>\
+<hr>";
+
+const char html_box_ambiente[] = "<div class=\"box\">\
+    <h4>Ambiente</h4>\
+    <form action=\"/tempumid\">\
+        <table>\
+            <tr>\
+              <th>Temperatura</th>\
+              <th>Umidade</th>\
+            </tr>\
+            <tr>\
+              <td>20 &deg;C</td>\
+              <td>50 %%</td>\
+            </tr>\
+        </table>\
+        <input type=\"submit\" value=\"Atualizar\">\
+    </form>\
+</div>\
+<hr>";
+
+const char html_box_display[] = "<div class=\"box\">\
+    <h4>Display</h4>\
+    <form action=\"/display\">\
+        <input type=\"text\" name=\"graus\" value=\"Arri Egua!\" maxlength=\"16\" size=\"16\">\
+        <input type=\"submit\" value=\"Enviar\">\
+    </form>\
+</div>\
+<hr>\
+<hr>";
+*/
+// const char html_head[] = "<!DOCTYPE HTML><html><head><title>ESP32 Devboard</title>
+// <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head><body>";
+// const char html_head_end[] = "<header><h1>ESP32 Devboard</h1></header>";
+// const char html_end[] = "</body></html>";
+
+    const char html_head[] = "<!DOCTYPE HTML><html><head><title>ESP32 Devboard</title></head><body>";
+    const char html_header[] = "<header><h1>ESP32 Devboard</h1></header>";
+    const char html_end[] = "</body></html>";
+
+    char html_style[] = "<style>h1{text-align:center;}h4{text-align:center;margin:auto;}hr{border:1px solid #ccc;width:80%%;}\
+    .box{text-align:center;margin-left:25%%;margin-right:25%%;margin-bottom:2px;}\
+    table{width:95%%;table-layout:fixed;text-align:center;margin-left:auto;margin-right:auto;}\
+    td,th{margin:0;text-align:center;}td{padding-bottom:12px;}@media(max-width:600px)\
+    {.box{margin-left:10%%;margin-right:10%%;}th{font-size:85%%;}}\
+    </style>";
+
+    httpd_resp_set_status(req, "200 OK");       //      HTTP status string, 
+    httpd_resp_set_type(req,"text/html");       //      Content Type
+    httpd_resp_set_hdr(req,"charset","utf-8");  //  
+  
+    httpd_resp_sendstr_chunk(req,html_head);
+    httpd_resp_sendstr_chunk(req,html_style);
+    httpd_resp_sendstr_chunk(req,html_header);
+
+// char tag_div_class_box[] = "<div class=\"box\"><h4>                </h4>";
+    add_str( &tag_div_class_box[21], "Entradas" );
+    httpd_resp_sendstr_chunk(req,tag_div_class_box);
+// char tag_table_tr[] = "<table><tr>";
+    httpd_resp_sendstr_chunk(req,tag_table_tr);
+
+// char tab_table_th[] = "<th>   </th>";
+    add_str( &tab_table_th[4],"E0");
+    httpd_resp_sendstr_chunk(req,tab_table_th);
+    add_str( &tab_table_th[4],"E1");
+    httpd_resp_sendstr_chunk(req,tab_table_th);
+
+// char tag_table_tr_tr[] = "</tr><tr>";
+    httpd_resp_sendstr_chunk(req,tag_table_tr_tr);
+
+// char tab_input_radio[] = "<td><input type=\"radio\" name=\"  \" disabled checke ></td>";
+    add_radio(tab_input_radio,"E0",0);
+    httpd_resp_sendstr_chunk(req,tab_input_radio);
+    add_radio(tab_input_radio,"E1",1);
+    httpd_resp_sendstr_chunk(req,tab_input_radio);
+
+// char tab_table_end[] = "</tr></table>";
+    httpd_resp_sendstr_chunk(req,tab_table_end);
+
+// char tab_form_action[] = "<form action=                >";
+    add_form_action(tab_form_action,"\"/entradas\"");
+    httpd_resp_sendstr_chunk(req,tab_form_action);
+
+// char tab_input_submit[] = "<input type=\"submit\" value=\"Ler entradas\">";
+    add_str_submit(tab_input_submit,"\"Ler Entradas\"");
+    httpd_resp_sendstr_chunk(req,tab_input_submit);
+// char tab_div_end[] = "</form></div><hr>";
+    httpd_resp_sendstr_chunk(req,tab_div_end);
+
+
+    httpd_resp_sendstr_chunk(req,html_end);
     httpd_resp_sendstr_chunk(req,NULL);
-//    httpd_resp_send_chunk(req, resp2, HTTPD_RESP_USE_STRLEN );
-    // httpd_resp_send(req, resp, HTTPD_RESP_USE_STRLEN);
     return ESP_OK;
 }
 httpd_uri_t uri_devboard = 
@@ -59,7 +273,30 @@ httpd_uri_t uri_devboard =
 };
 
 
-httpd_uri_t * uri_vector[] = { &uri_example, &uri_test, &uri_devboard };
+esp_err_t get_json(httpd_req_t *req)
+{
+    const char resp[] = "{\"Placa\": \"DevBoard\"}";
+    const char resp2[] = ",{\"Versao\":\"v01r04\"}";
+    httpd_resp_set_status(req, "200 OK"); //      HTTP status string, 
+    httpd_resp_set_type(req,"json");   //      Content Type
+    httpd_resp_set_hdr(req,"charset","utf-8");    //  
+    httpd_resp_sendstr_chunk(req,resp);
+    httpd_resp_sendstr_chunk(req,resp2);
+    httpd_resp_sendstr_chunk(req,NULL);
+    return ESP_OK;
+}
+httpd_uri_t uri_json = 
+{
+    .uri = "/json",
+    .method = HTTP_GET,
+    .handler = get_json,
+    .user_ctx = NULL
+};
+
+
+
+
+httpd_uri_t * uri_vector[] = { &uri_example, &uri_test, &uri_devboard, &uri_json };
 size_t uri_vector_number_of_elements = sizeof(uri_vector)/sizeof(uri_vector[0]);
 
 
