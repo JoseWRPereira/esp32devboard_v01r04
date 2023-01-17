@@ -19,4 +19,7 @@
 #define STEPMOTOR_STEP_PIN              21
 #define STEPMOTOR_DIR_PIN               19
 
+#define ADC_1_CH0                       36
+#define ADC_1_CH3                       39
+
 #endif

@@ -30,8 +30,8 @@ void delay( unsigned int t )
 #define LCD_BUS( x )    lcdbus = ((lcdbus & 0x0F) | (x & 0xF0)), serial_out_scan(&lcd_drv)
 #define LCD_EN( x )     lcdbus = x ? (lcdbus | 0x08) : (lcdbus & ~0x08), serial_out_scan(&lcd_drv)
 #define LCD_RS( x )     lcdbus = x ? (lcdbus | 0x04) : (lcdbus & ~0x04)
-#define LCD_ROWS        2
-#define LCD_COLS        16
+#define LCD_ROWS        4
+#define LCD_COLS        20
 // __delay_ms( 2 );
 // __delay_us( 40 );
 #define LCD_SHORT_DELAY()           delay( 8 )
@@ -75,11 +75,13 @@ void delay( unsigned int t )
 
 #define LCD_SET_CGRAM_ADDRS( adrs ) (0x40+(adrs & 0x3F))
 
-#define LCD_SET_DDRAM_ADDRS( adrs ) (0x80+(adrs & 0x7F))
-#define LCD_ADDR_LINE_0             0x00
-#define LCD_ADDR_LINE_1             0x40
+// #define LCD_SET_DDRAM_ADDRS( adrs ) (0x80+(adrs & 0x7F))
+// #define LCD_ADDR_LINE_0             0x80
+// #define LCD_ADDR_LINE_1             0xC0
+// #define LCD_ADDR_LINE_2             0x94
+// #define LCD_ADDR_LINE_3             0xD4
 
-
+const char lcd_addr_line[4] = {0x80, 0xC0, 0x94, 0xD4};
 
 
 /// @brief Envia uma instrução para o display (Instruction Register)
@@ -150,7 +152,8 @@ void lcd_dataReg( unsigned char d )
 /// @param col coluna do display: começa em 0
 void lcd_lincol( unsigned char lin, unsigned char col)
 {
-    lcd_instReg( LCD_SET_DDRAM_ADDRS( ((LCD_ADDR_LINE_1 * lin) + (col + LCD_ADDR_LINE_0)) ) );
+    // lcd_instReg( LCD_SET_DDRAM_ADDRS( ((LCD_ADDR_LINE_1 * lin) + (col + LCD_ADDR_LINE_0)) ) );
+    lcd_instReg( lcd_addr_line[lin] + col );
 }
 
 

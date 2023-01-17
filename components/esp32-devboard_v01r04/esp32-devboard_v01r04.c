@@ -5,6 +5,7 @@
 #include "lcd.h"
 #include "keyboard.h"
 #include "stepmotor.h"
+#include "adc.h"
 
 void esp32_devboard_init( void )
 {
@@ -12,6 +13,7 @@ void esp32_devboard_init( void )
     lcd_init();
     keyboard_init();
     stepmotor_init();
+    adc_init();
 }
 
 
@@ -29,5 +31,6 @@ Devboard devboard = {
     .keyboard.init = keyboard_init,
     .keyboard.key = keyboard,
     .stepmotor.init = stepmotor_init,
-    .stepmotor.passos = stepmotor_passos
+    .stepmotor.passos = stepmotor_passos,
+    .adc.init = adc_init
 };
