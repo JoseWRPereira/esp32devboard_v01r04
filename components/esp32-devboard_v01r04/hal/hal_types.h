@@ -93,6 +93,11 @@ typedef struct lcdT
 {
     void (* init)(void);
     void (* clr)( void );
+
+    /// @brief Escreve uma string na (linha,coluna) do display
+    /// @param lin Posição linha a inserir string
+    /// @param col Posição coluna a inserir string
+    /// @param str String a ser exibida no display a partir da posição (li, col)
     void (* print)( unsigned char lin, unsigned char col, char * str );
     void (* num)( uint8_t lin, uint8_t col, int16_t num, uint8_t tam );
 } Lcd;
@@ -114,7 +119,7 @@ typedef struct keyboardT
 typedef struct stepmotorT
 {
     void (* init)( void );
-    void (* passos)(uint32_t passos, uint8_t dir);
+    void (* passos)(int32_t passos);
 } Stepmotor;
 
 

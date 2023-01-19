@@ -24,16 +24,19 @@ void delay_step( unsigned int t )
     vTaskDelay( pdMS_TO_TICKS( t ));
 }
 
-void stepmotor_passos(uint32_t passos, uint8_t dir)
+void stepmotor_passos( int32_t passos )
 {
-    gpio_set_level( STEPMOTOR_DIR_PIN, dir );
+    gpio_set_level( STEPMOTOR_DIR_PIN, (passos>0)?1:0 );
     gpio_set_level( STEPMOTOR_SLEEP_PIN, 1 );
     while( passos )
     {
         gpio_set_level( STEPMOTOR_STEP_PIN, 1 );
         gpio_set_level( STEPMOTOR_STEP_PIN, 0 );
         delay_step(10);
-        --passos;
+        if( passos > 0 )
+            --passos;
+        else
+            ++passos;
     }
     gpio_set_level( STEPMOTOR_SLEEP_PIN, 0 );
 }

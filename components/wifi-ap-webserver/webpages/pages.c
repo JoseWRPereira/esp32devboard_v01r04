@@ -3,6 +3,168 @@
 #include "esp_http_server.h"
 #include "wifi-ap-webserver.h"
 #include "string.h"
+#include "esp_log.h"
+
+static const char * MARK = "tag";
+
+uint16_t str_to_uint16( char * ptr )
+{
+    uint16_t n = 0;
+    while( *ptr )
+    {
+        if( (*ptr >= '0') && (*ptr <= '9') )
+        {
+            n *= 10;
+            n += (*ptr) - '0';
+        }
+        ++ptr;
+    }
+    return( n );
+}
+int32_t str_to_int32( char * ptr )
+{
+    int32_t n = 0;
+    uint8_t neg = 0;
+    while( *ptr )
+    {
+        if( (*ptr >= '0') && (*ptr <= '9') )
+        {
+            n *= 10;
+            n += (*ptr) - '0';
+        }
+        if( *ptr == '-')
+        {
+            neg = 1;
+        }
+        ++ptr;
+    }
+    if( neg )
+    {
+        n *= -1;
+    }
+    return( n );
+}
+
+
+
+uint8_t web_digital_output_var = 0;
+uint8_t web_digital_output( void )
+{
+    return( web_digital_output_var );
+}
+
+esp_err_t get_digital_output(httpd_req_t *req)
+{
+    // Read the URI line and get the host
+    char *buf;
+    size_t buf_len;
+    buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
+    if (buf_len > 1)
+    {
+        buf = malloc(buf_len);
+        if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK)
+        {
+            ESP_LOGI(MARK, "Host: %s", buf);
+        }
+        free(buf);
+    }
+
+    // Read the URI line and get the parameters
+    buf_len = httpd_req_get_url_query_len(req) + 1;
+    if (buf_len > 1) 
+    {
+        buf = malloc(buf_len);
+        if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) 
+        {
+            ESP_LOGI(MARK, "Found URL query: %s", buf);
+            char param[32];
+            if (httpd_query_key_value(buf, "output", param, sizeof(param)) == ESP_OK)
+            {
+                ESP_LOGI(MARK, "The OUTPUT value = %s", param);
+                web_digital_output_var = str_to_uint16( param );
+            }
+        }
+        free(buf);
+    }
+
+    return ESP_OK;
+}
+httpd_uri_t uri_get_digital_output = 
+{
+    .uri = "/digital",
+    .method = HTTP_GET,
+    .handler = get_digital_output,
+    .user_ctx = NULL
+};
+
+
+
+
+
+
+int32_t web_stepmotor_var = 0;
+int32_t web_stepmotor( void )
+{
+    return( web_stepmotor_var );
+}
+void web_stepmotor_reset( void )
+{
+    web_stepmotor_var = 0;
+}
+
+esp_err_t get_stepmotor(httpd_req_t *req)
+{
+    // Read the URI line and get the host
+    char *buf;
+    size_t buf_len;
+    buf_len = httpd_req_get_hdr_value_len(req, "Host") + 1;
+    if (buf_len > 1)
+    {
+        buf = malloc(buf_len);
+        if (httpd_req_get_hdr_value_str(req, "Host", buf, buf_len) == ESP_OK)
+        {
+            ESP_LOGI(MARK, "Host: %s", buf);
+        }
+        free(buf);
+    }
+
+    // Read the URI line and get the parameters
+    buf_len = httpd_req_get_url_query_len(req) + 1;
+    if (buf_len > 1) 
+    {
+        buf = malloc(buf_len);
+        if (httpd_req_get_url_query_str(req, buf, buf_len) == ESP_OK) 
+        {
+            ESP_LOGI(MARK, "Found URL query: %s", buf);
+            char param[32];
+            if (httpd_query_key_value(buf, "steps", param, sizeof(param)) == ESP_OK)
+            {
+                ESP_LOGI(MARK, "The value = %s", param);
+                web_stepmotor_var = str_to_int32( param );
+            }
+        }
+        free(buf);
+    }
+
+    return ESP_OK;
+}
+httpd_uri_t uri_get_stepmotor = 
+{
+    .uri = "/stepmotor",
+    .method = HTTP_GET,
+    .handler = get_stepmotor,
+    .user_ctx = NULL
+};
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -296,7 +458,14 @@ httpd_uri_t uri_json =
 
 
 
-httpd_uri_t * uri_vector[] = { &uri_example, &uri_test, &uri_devboard, &uri_json };
+httpd_uri_t * uri_vector[] = {  
+                                &uri_get_digital_output,
+                                &uri_get_stepmotor,
+                                &uri_example, 
+                                &uri_test, 
+                                &uri_devboard, 
+                                &uri_json 
+                            };
 size_t uri_vector_number_of_elements = sizeof(uri_vector)/sizeof(uri_vector[0]);
 
 
